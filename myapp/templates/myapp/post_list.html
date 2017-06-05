@@ -1,19 +1,20 @@
-<html>
-    <head>
-        <title>Django Girls blog</title>
-    </head>
-    <body>
-        <div>
-            <h1><a href="/">Django Girls Blog</a></h1>
-        </div>
-		
+{% extends 'myapp/base.html' %}
+
+{% block content %}
+
 {% for post in posts %}
-        <div>
-            <h1>published: {{ post.published_date }}</h1>
-            <h2><a href="">{{ post.title }}</a></h2>
-			<p>{{ post.text|linebreaksbr }}</p>
-        </div>
+	<div class="post">
+		<div class="date">
+			published: {{ post.published_date }}
+		</div>
+		
+		<h1><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h1>
+		<p>{{ post.text|linebreaksbr }}</p>
+	</div>
 {% endfor %}
-        
-    </body>
-</html>
+
+{% endblock %}
+
+<!--pk is short for primary key, which is a unique name for each record in a database. 
+Because we didn't specify a primary key in our Post model, Django creates one for us 
+and adds it as a field named pk to each of our posts. We access the primary key by writing post.pk -->
