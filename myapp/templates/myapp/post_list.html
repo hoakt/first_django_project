@@ -5,11 +5,13 @@
 {% for post in posts %}
 	<div class="post">
 		<div class="date">
-			published: {{ post.published_date }}
+			<p>published: {{ post.published_date }}</p>
+			<p>created: {{ post.created_date }}</p>
 		</div>
 		
 		<h1><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h1>
-		<p>{{ post.text|truncatechars:200 }}</p>
+		<p>{{ post.text|truncatechars:200|linebreaksbr }}</p>
+		<a href="{% url 'post_detail' pk=post.pk %}">Comments: {{ post.approved_comments.count }}</a> <!--add approved_comments to Post model due to post_list view is create by Post -->
 	</div>
 {% endfor %}
 
