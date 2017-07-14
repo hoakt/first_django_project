@@ -4,7 +4,7 @@
 	<div class="post">
 		<div class="date">
 			{% if post.published_date %}
-				{{ post.published_date }}
+				Published: {{ post.published_date }}
 			{% else %}
 				<a class="btn btn-default" href="{% url 'post_publish' pk=post.pk %}">Publish</a>
 			{% endif %}
@@ -30,7 +30,8 @@
 					<a class="btn btn-default" href="{% url 'comment_approve' pk=comment.pk %}"><span class="glyphicon glyphicon-ok"></span></a>
 				{% endif %}
 				{% if user.is_authenticated %}
-					<a class="btn btn-default" href="{% url 'comment_remove' pk=comment.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
+					<a class="btn" href="{% url 'comment_remove' pk=comment.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
+					<a class="btn" href="{% url 'edit_comment' pk=comment.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
 				{% endif %}
 			</div>
 			<strong>{{ comment.author }}</strong>

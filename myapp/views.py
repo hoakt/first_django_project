@@ -19,7 +19,7 @@ def post_detail(request, pk):
 @login_required
 def post_new(request):
 	if request.method == "POST":
-		form = PostForm(request.POST) # new fields' data from new post are now in request.POST
+		form = PostForm(request.POST) # fields' data from new post are now in request.POST
 		if form.is_valid():
 			post = form.save(commit=False)
 			post.author = request.user
@@ -40,7 +40,7 @@ def post_edit(request, pk):
 			post.author = request.user
 #			post.published_date = timezone.now()
 			post.save()
-			return redirect('post_detail', pk=pk)
+			return redirect('post_detail', pk=post.pk)
 	else:
 		form = PostForm(instance=post)
 	return render(request, 'myapp/post_edit.html', {'form': form})
@@ -62,7 +62,7 @@ def post_remove(request, pk):
     post.delete()
     return redirect('post_list')
 	
-def add_comment(request,pk):
+def add_comment(request, pk):
 	post = get_object_or_404(Post, pk=pk)
 	if request.method == "POST":
 		form = CommentForm(request.POST) # use CommentForm to create a form
@@ -74,6 +74,23 @@ def add_comment(request,pk):
 	else:
 		form = CommentForm()
 	return render(request, 'myapp/add_comment_form.html', {'form': form})
+
+
+@login_required	
+def edit_comment(request, pk):
+	comment = get_object_or_404(Comment, pk=pk)
+	post = get_object_or_404(Post, pk=comment.post.pk)
+	if request.method == "POST":
+		form = CommentForm(request.POST, instance=comment) # use CommentForm to create a form
+		if form.is_valid():
+			comment = form.save(commit=False)
+			comment.post = post
+			comment.save()
+			return redirect('post_detail', pk=post.pk)
+	else:
+		form = CommentForm(instance=comment)
+	return render(request, 'myapp/add_comment_form.html', {'form': form})
+
 	
 @login_required
 def comment_approve(request, pk):
